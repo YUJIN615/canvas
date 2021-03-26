@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas</title>
+    <style>
+        canvas {
+            background: #eee;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image</h1>
+    <canvas class="canvas" width="600" height="400"></canvas>
+
+    <canvas class="canvas-2" width="600" height="400"></canvas>
+
+    <script>
+        const canvas = document.querySelector('.canvas');
+        const context = canvas.getContext('2d');
+
+        const imgElem = new Image();
+        imgElem.src = './images/cat.jpg'
+        imgElem.addEventListener('load', () => {
+            context.drawImage(imgElem, 50, 50, 200, 150);
+            context.drawImage(imgElem, 100, 100, 300, 200, 300, 200, 300, 200);
+        })
+
+        const canvas2 = document.querySelector('.canvas-2');
+        const context2 = canvas2.getContext('2d');
+
+        context2.fillRect(50, 50, 100, 100);
+        context2.fillStyle = 'red';
+        context2.fillRect(100, 100, 100, 100);
+        context2.clearRect(80, 80, 50, 50);
+        context2.strokeRect(150, 150, 100, 100);
+
+        context2.beginPath();
+        context2.moveTo(300, 100);
+        context2.lineTo(600, 200);
+        context2.stroke();
+        context2.closePath();
+
+        context2.beginPath();
+        context2.moveTo(300, 50);
+        context2.lineTo(600, 150);
+        context2.stroke();
+
+        let xPos = 30;
+
+        function draw () {
+            context2.clearRect(0, 300, canvas.width, canvas.height);
+            context2.beginPath();
+            context2.arc(xPos, 350, 50, 0, 2 * Math.PI, false);
+            context2.fill();
+            xPos += 5;
+
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+
+    </script>
+
+</body>
+</html>

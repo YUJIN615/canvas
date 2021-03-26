@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>그림판</title>
+    <style>
+        canvas {
+            background: #eee;
+            margin-bottom: 30px;
+        }
+        .color-btn {
+            width: 30px;
+            height: 30px;
+            border: 0;
+            border-radius: 50%;
+        }
+        .color-btn[data-color="black"] { background: black; }
+        .color-btn[data-color="red"] { background: red; }
+        .color-btn[data-color="yellow"] { background: yellow; }
+        .color-btn[data-color="green"] { background: green; }
+        .color-btn[data-color="blue"] { background: blue; }
+        .image-btn {
+            width: 40px;
+            height: 40px;
+            background: url('./images/cat.jpg') no-repeat 50% 50% ;
+            background-size: contain;
+        }
+        .save-btn {
+            margin-top: 30px;
+        }
+        .result-image {
+            width: 200px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+<h1>그림판</h1>
+<canvas class="canvas" width="600" height="400"></canvas>
+<div class="control">
+    <button class="color-btn" data-type="color" data-color="black"></button>
+    <button class="color-btn" data-type="color" data-color="red"></button>
+    <button class="color-btn" data-type="color" data-color="yellow"></button>
+    <button class="color-btn" data-type="color" data-color="green"></button>
+    <button class="color-btn" data-type="color" data-color="blue"></button>
+    <button class="image-btn" data-type="image"></button>
+</div>
+<div>
+    <button class="save-btn">저장</button>
+</div>
+<div class="result-image"></div>
+
+<script>
+    const canvas = document.querySelector('.canvas');
+    const context = canvas.getContext('2d');
+    const control = document.querySelector('.control');
+    const saveBtn = document.querySelector('.save-btn');
+    const resultImage = document.querySelector('.result-image');
+
+    let drawingMode = false;
+    let brush = 'color'; // 'color' 또는 'image'
+    let colorVal = 'black';
+
+    const imgElem = new Image();
+    imgElem.src = './images/cat.jpg';
+
+    function downHandler () {
+        drawingMode = true;
+    }
+
+    function moveHandler (e) {
+        if (!drawingMode) return;
+
+        switch (brush) {
+            case 'color':
+                context.beginPath();
+                context.arc(e.layerX, e.layerY, 5, 0, Math.PI * 2, false);
+                context.fill();
+                break;
+
+            case 'image':
+                context.drawImage(imgElem, e.layerX, e.layerY, 50, 50);
+
+                break;
+        }
+
+    }
+
+    function upHandler () {
+        drawingMode = false;
+    }
+
+    function setColor (e) {
+        brush = e.target.getAttribute('data-type');
+        colorVal = (e.target.getAttribute('data-color'));
+        context.fillStyle = colorVal;
+    }
+
+    function createImage () {
+        const url = canvas.toDataURL('image/jpg');
+        // console.log(url);
+        const imgElem = new Image();
+        imgElem.src = url;
+        resultImage.appendChild(imgElem);
+    }
+
+    canvas.addEventListener("mousedown", downHandler);
+    canvas.addEventListener("mousemove", moveHandler);
+    canvas.addEventListener("mouseup", upHandler);
+    control.addEventListener('click', setColor);
+    saveBtn.addEventListener('click', createImage);
+
+</script>
+
+</body>
+</html>

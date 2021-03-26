@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>transform</title>
+    <style>
+        canvas {
+            background: #eee;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>transform</h1>
+    <canvas class="canvas" width="500" height="500"></canvas>
+
+    <script>
+        const canvas = document.querySelector('.canvas');
+        const context = canvas.getContext('2d');
+        let scaleValue = 1;
+
+        // context.fillRect(100, 100, 200, 200);
+        //
+        // context.fillStyle = 'orange';
+        // context.fillRect(200, 200, 200, 200);
+        //
+        // context.save();
+        //
+        // context.fillStyle = 'green';
+        // context.arc(300, 300, 50, 0, Math.PI * 2, false);
+        // context.fill();
+        //
+        // context.restore();
+        //
+        // context.beginPath();
+        // context.arc(300, 300, 20, 0, Math.PI * 2, false);
+        // context.fill();
+
+        let rotationValue = 0;
+
+        function toRadian (d) {
+            return d * Math.PI / 180;
+        }
+
+        function draw () {
+            // context.clearRect(0, 0, canvas.width, canvas.height);
+
+            context.save();
+
+            context.setTransform(1, 0, 0, 1, 0, 0); // 단위행렬을 이용해서 변환을 초기화함
+            // context.resetTransform();
+
+            context.translate(250, 250);
+            context.scale(scaleValue, scaleValue);
+            context.rotate(toRadian(rotationValue));
+
+            rotationValue += 1;
+            scaleValue += 0.03;
+
+            context.strokeRect(-50, -50, 100, 100);
+
+            // 단위행렬을 이용해서 변환을 초기화함. 변환을 초기화 한 다음에 다시 변화해주는 것이 좋음
+            context.setTransform(1, 0, 0, 1, 0, 0);
+            context.fillRect(10, 10, 30, 30);
+
+            context.restore();
+
+
+
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+    </script>
+</body>
+</html>
